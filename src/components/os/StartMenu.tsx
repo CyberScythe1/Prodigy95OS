@@ -1,0 +1,80 @@
+'use client';
+
+import React from 'react';
+import styled from 'styled-components';
+import { List, ListItem, Divider } from 'react95';
+import { useDesktopStore } from '@/store/useDesktopStore';
+
+const StartMenuContainer = styled.div`
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  z-index: 10001;
+  display: flex;
+  background: silver;
+  border-top: 2px solid white;
+  border-left: 2px solid white;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  padding: 2px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+`;
+
+const SidebarBrand = styled.div`
+  background: linear-gradient(0deg, #000080, #1084d0);
+  color: white;
+  width: 32px;
+  min-height: 250px;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 15px;
+  padding-left: 2px;
+`;
+
+const BrandText = styled.h2`
+  transform: rotate(-90deg);
+  transform-origin: bottom left;
+  white-space: nowrap;
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin: 0;
+  margin-left: 24px;
+`;
+
+export default function StartMenu() {
+    const { startMenuOpen, openApp, toggleStartMenu } = useDesktopStore();
+
+    if (!startMenuOpen) return null;
+
+    const handleLaunchApp = (id: string, name: string) => {
+        openApp(id, name);
+    };
+
+    return (
+        <StartMenuContainer>
+            <SidebarBrand>
+                <BrandText><strong>Prodigy95</strong> OS</BrandText>
+            </SidebarBrand>
+            <List horizontalAlign="left" verticalAlign="bottom" style={{ boxShadow: 'none', border: 'none', margin: 0, padding: 0 }}>
+                <ListItem onClick={() => handleLaunchApp('youtube-summarizer', 'YouTube Summarizer')}>
+                    <span role="img" aria-label="video">📹</span> YouTube Summarizer
+                </ListItem>
+                <ListItem onClick={() => handleLaunchApp('notes-app', 'Notes Saver')}>
+                    <span role="img" aria-label="notes">📝</span> Notes Saver
+                </ListItem>
+                <ListItem onClick={() => handleLaunchApp('job-search', 'Job Search')}>
+                    <span role="img" aria-label="jobs">💼</span> AI Job Search
+                </ListItem>
+
+                <Divider />
+
+                <ListItem disabled>⚙️ Settings</ListItem>
+                <ListItem disabled>🔍 Help</ListItem>
+                <Divider />
+                <ListItem onClick={toggleStartMenu}>Shut Down...</ListItem>
+            </List>
+        </StartMenuContainer>
+    );
+}
