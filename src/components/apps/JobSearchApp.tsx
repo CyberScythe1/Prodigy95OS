@@ -22,7 +22,6 @@ export default function JobSearchApp() {
 
   const [role, setRole] = useState('');
   const [location, setLocation] = useState('');
-  const [level, setLevel] = useState('entry');
 
   const handleSearch = async () => {
     if (!role.trim()) return;
@@ -40,7 +39,7 @@ export default function JobSearchApp() {
       const response = await fetch('/api/job-search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ role, location, level })
+        body: JSON.stringify({ role, location })
       });
 
       const data = await response.json();
@@ -88,12 +87,6 @@ export default function JobSearchApp() {
                   fullWidth 
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                />
-                <Select
-                    options={[{ value: 'entry', label: 'Entry Level' }, { value: 'mid', label: 'Mid Level' }, { value: 'senior', label: 'Senior Level' }, { value: 'Any', label: 'Any Level' }]}
-                    width={150}
-                    value={level}
-                    onChange={(val) => setLevel(val.value)}
                 />
                 <Button onClick={handleSearch} disabled={loading || !role.trim()}>Search</Button>
             </div>

@@ -40,7 +40,7 @@ async function callGeminiWithFallback(prompt: string) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { role, location, level } = await req.json();
+    const { role, location, level = 'Any' } = await req.json();
 
     if (!role) {
       return NextResponse.json({ error: 'Job role is required' }, { status: 400 });
