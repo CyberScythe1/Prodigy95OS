@@ -11,30 +11,30 @@ const AppContainer = styled.div`
   display: flex;
   height: 100%;
   gap: 10px;
+  background: silver;
+  padding: 4px;
 `;
 
-const Sidebar = styled.div`
+const Column = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 250px;
   height: 100%;
+  background: white;
+  border: 2px inset #fff;
+  padding: 4px;
 `;
 
-const SidebarSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  flex: 1; /* take half height */
-  overflow: hidden;
+const FoldersColumn = styled(Column)`
+  width: 180px;
 `;
 
-const EditorColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+const NotesColumn = styled(Column)`
+  width: 220px;
+`;
+
+const EditorColumn = styled(Column)`
   flex: 1;
-  height: 100%;
 `;
 
 const EditorArea = styled.textarea`
@@ -95,79 +95,78 @@ export default function NotesApp() {
 
     return (
         <AppContainer>
-            <Sidebar>
-                {/* Folders Section (Top Half) */}
-                <SidebarSection>
-                    <div style={{ display: 'flex', gap: '4px' }}>
+            {/* Column 1: Folders */}
+            <FoldersColumn>
+                <div style={{ padding: '4px', borderBottom: '2px solid silver', marginBottom: '4px' }}>
+                   <div style={{ display: 'flex', gap: '4px', marginBottom: '4px' }}>
                         <TextInput
-                            placeholder="New Folder..."
+                            placeholder="Add..."
                             value={newTopicName}
                             onChange={(e) => setNewTopicName(e.target.value)}
                             style={{ flex: 1 }}
                         />
                         <Button onClick={handleAddTopic} disabled={!newTopicName.trim()}>+</Button>
                     </div>
-                    <div style={{ display: 'flex', gap: '4px' }}>
-                        <Button
-                            disabled={!selectedTopicId}
-                            onClick={() => {
-                                if (selectedTopicId) {
-                                    deleteTopic(selectedTopicId);
-                                    setSelectedTopicId(null);
-                                    setSelectedNoteId(null);
-                                }
-                            }}
-                            fullWidth
-                        >
-                            Delete Folder
-                        </Button>
-                    </div>
-                    <ScrollView style={{ flex: 1, backgroundColor: 'white' }}>
-                        <List inline fullWidth style={{ border: 'none' }}>
-                            {topics.map(topic => (
-                                <ListItem
-                                    key={topic.id}
-                                    onClick={() => { setSelectedTopicId(topic.id); setSelectedNoteId(null); }}
-                                    style={{ fontWeight: 'bold', background: selectedTopicId === topic.id ? '#000080' : 'transparent', color: selectedTopicId === topic.id ? 'white' : 'black' }}
-                                >
-                                    📁 {topic.name}
-                                </ListItem>
-                            ))}
-                            {topics.length === 0 && <div style={{ padding: 10, color: '#888' }}>No folders found.</div>}
-                        </List>
-                    </ScrollView>
-                </SidebarSection>
+                    <Button
+                        disabled={!selectedTopicId}
+                        onClick={() => {
+                            if (selectedTopicId) {
+                                deleteTopic(selectedTopicId);
+                                setSelectedTopicId(null);
+                                setSelectedNoteId(null);
+                            }
+                        }}
+                        fullWidth
+                        size="sm"
+                    >
+                        Delete Folder
+                    </Button>
+                </div>
+                <ScrollView style={{ flex: 1 }}>
+                    <List fullWidth style={{ border: 'none' }}>
+                        {topics.map(topic => (
+                            <ListItem
+                                key={topic.id}
+                                onClick={() => { setSelectedTopicId(topic.id); setSelectedNoteId(null); }}
+                                style={{ fontWeight: 'bold', background: selectedTopicId === topic.id ? '#000080' : 'transparent', color: selectedTopicId === topic.id ? 'white' : 'black' }}
+                            >
+                                📁 {topic.name}
+                            </ListItem>
+                        ))}
+                    </List>
+                </ScrollView>
+            </FoldersColumn>
 
-                {/* Notes Section (Bottom Half) */}
-                <SidebarSection>
-                    <div style={{ display: 'flex', gap: '4px' }}>
-                        <Button
-                            disabled={!selectedTopicId}
-                            onClick={handleAddNote}
-                            fullWidth
-                        >
-                            + New Note
-                        </Button>
-                    </div>
-                    <Divider />
-                    <ScrollView style={{ flex: 1, backgroundColor: 'white' }}>
-                        <List inline fullWidth style={{ border: 'none' }}>
-                            {!selectedTopicId && <div style={{ padding: 10, color: '#888' }}>Select a folder above.</div>}
-                            {selectedTopicId && visibleNotes.length === 0 && <div style={{ padding: 10, color: '#888' }}>No notes in this folder.</div>}
-                            {visibleNotes.map(note => (
-                                <ListItem
-                                    key={note.id}
-                                    onClick={() => setSelectedNoteId(note.id)}
-                                    style={{ background: selectedNoteId === note.id ? '#000080' : 'transparent', color: selectedNoteId === note.id ? 'white' : 'black', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
-                                >
-                                    📄 {note.title || 'Untitled'}
-                                </ListItem>
-                            ))}
-                        </List>
-                    </ScrollView>
-                </SidebarSection>
-            </Sidebar>
+            {/* Column 2: Notes */}
+            <NotesColumn>
+                <div style={{ padding: '4px', borderBottom: '2px solid silver', marginBottom: '4px' }}>
+                    <Button
+                        disabled={!selectedTopicId}
+                        onClick={handleAddNote}
+                        fullWidth
+                        size="sm"
+                    >
+                        + New Note
+                    </Button>
+                </div>
+                <ScrollView style={{ flex: 1 }}>
+                    <List fullWidth style={{ border: 'none' }}>
+                        {!selectedTopicId && <div style={{ padding: 10, color: '#888', fontSize: '12px' }}>Pick a folder.</div>}
+                        {selectedTopicId && visibleNotes.length === 0 && <div style={{ padding: 10, color: '#888', fontSize: '12px' }}>Empty.</div>}
+                        {visibleNotes.map(note => (
+                            <ListItem
+                                key={note.id}
+                                onClick={() => setSelectedNoteId(note.id)}
+                                style={{ background: selectedNoteId === note.id ? '#000080' : 'transparent', color: selectedNoteId === note.id ? 'white' : 'black', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+                            >
+                                📄 {note.title || 'Untitled'}
+                            </ListItem>
+                        ))}
+                    </List>
+                </ScrollView>
+            </NotesColumn>
 
+            {/* Column 3: Editor */}
             <EditorColumn>
                 {selectedNote ? (
                     <>
@@ -192,8 +191,8 @@ export default function NotesApp() {
                         />
                     </>
                 ) : (
-                    <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', backgroundColor: '#808080', color: 'white', border: '2px inset #fff', textAlign: 'center', padding: '20px' }}>
-                        Select a folder, then select a note to start editing.
+                    <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', backgroundColor: '#c0c0c0', color: 'black', textAlign: 'center', padding: '20px' }}>
+                        Select a folder and a note to begin.
                     </div>
                 )}
             </EditorColumn>

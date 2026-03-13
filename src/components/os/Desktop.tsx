@@ -41,6 +41,14 @@ const Watermark = styled.div`
   }
 `;
 
+const Attribution = styled.p`
+  font-size: 12px;
+  margin-top: 4px;
+  opacity: 0.6;
+  text-transform: none;
+  letter-spacing: normal;
+`;
+
 export default function Desktop({ children }: { children: React.ReactNode }) {
     const { closeStartMenu } = useDesktopStore();
 
@@ -49,6 +57,7 @@ export default function Desktop({ children }: { children: React.ReactNode }) {
             <Watermark>
                 <h1>Prodigy95</h1>
                 <p>AI Operating System</p>
+                <Attribution>By King Prithvi</Attribution>
             </Watermark>
             {children}
         </DesktopContainer>
