@@ -98,7 +98,7 @@ export default function JobSearchApp() {
                 </div>
             )}
 
-            <ScrollView style={{ flex: 1, backgroundColor: 'white' }}>
+            <ScrollView style={{ flex: 1, backgroundColor: 'white', overflowY: 'auto' }}>
                 <Table>
                     <TableHead>
                         <TableRow>
