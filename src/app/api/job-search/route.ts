@@ -10,9 +10,9 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 async function callGeminiWithFallback(prompt: string) {
   const models = [
     'gemini-2.5-flash',
-    'gemini-3.1-flash-lite',
+    'gemini-3.1-flash-lite-preview',
     'gemini-2.5-flash-lite',
-    'gemini-3-flash'
+    'gemini-3-flash-preview'
   ];
   
   let lastError = null;
