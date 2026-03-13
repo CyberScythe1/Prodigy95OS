@@ -23,6 +23,15 @@ export default function JobSearchApp() {
   const [role, setRole] = useState('');
   const [location, setLocation] = useState('');
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const handleSearch = async () => {
     if (!role.trim()) return;
 
@@ -75,7 +84,7 @@ export default function JobSearchApp() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '10px' }}>
-            <div style={{ display: 'flex', gap: '8px' }}>
+            <div style={{ display: 'flex', gap: '8px', flexDirection: isMobile ? 'column' : 'row' }}>
                 <TextInput 
                   placeholder="Job Role (e.g. Frontend)" 
                   fullWidth 
@@ -88,12 +97,12 @@ export default function JobSearchApp() {
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                 />
-                <Button onClick={handleSearch} disabled={loading || !role.trim()}>Search</Button>
+                <Button onClick={handleSearch} disabled={loading || !role.trim()} fullWidth={isMobile}>Search</Button>
             </div>
 
             {loading && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <span style={{ fontSize: '12px' }}>Connecting to Firecrawl Extranet...</span>
+                    <span style={{ fontSize: '12px', minWidth: isMobile ? 'auto' : '150px' }}>{isMobile ? '...' : 'Connecting to Firecrawl Extranet...'}</span>
                     <ProgressBar value={progress} style={{ flex: 1 }} />
                 </div>
             )}

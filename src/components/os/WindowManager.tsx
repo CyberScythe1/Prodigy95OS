@@ -26,10 +26,20 @@ export default function WindowManager({
     } = useDesktopStore();
 
     const windowState = windows.find(w => w.id === id);
+    const [isMobile, setIsMobile] = React.useState(false);
+
+    React.useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     if (!windowState || windowState.isMinimized) {
         return null;
     }
+
+    const isEffectiveMaximized = windowState.isMaximized || isMobile;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleDragStop = (e: any, d: any) => {
@@ -47,32 +57,34 @@ export default function WindowManager({
 
     return (
         <Rnd
-            size={windowState.isMaximized ? { width: '100%', height: '100%' } : { width: windowState.size.width, height: windowState.size.height }}
-            position={windowState.isMaximized ? { x: 0, y: 0 } : { x: windowState.position.x, y: windowState.position.y }}
+            size={isEffectiveMaximized ? { width: '100vw', height: '100%' } : { width: windowState.size.width, height: windowState.size.height }}
+            position={isEffectiveMaximized ? { x: 0, y: 0 } : { x: windowState.position.x, y: windowState.position.y }}
             onDragStop={handleDragStop}
             onResizeStop={handleResizeStop}
-            minWidth={300}
+            minWidth={isMobile ? '100vw' : 300}
             minHeight={200}
             bounds="parent"
-            disableDragging={windowState.isMaximized}
-            enableResizing={!windowState.isMaximized}
+            disableDragging={isEffectiveMaximized}
+            enableResizing={!isEffectiveMaximized}
             dragHandleClassName="handle"
             style={{ zIndex: windowState.zIndex }}
             onMouseDown={() => focusApp(id)}
         >
-            <Window style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <WindowHeader className={windowState.isMaximized ? '' : 'handle'} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: activeWindowId === id ? '#000080' : '#808080' }}>
-                    <span>{appName}</span>
+            <Window style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', border: isMobile ? 'none' : undefined }}>
+                <WindowHeader className={isEffectiveMaximized ? '' : 'handle'} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: activeWindowId === id ? '#000080' : '#808080' }}>
+                    <span style={{ fontSize: isMobile ? '14px' : 'inherit' }}>{appName}</span>
                     <div style={{ display: 'flex', gap: '2px' }}>
-                        <Button onClick={(e) => { e.stopPropagation(); toggleMaximizeApp(id); }} style={{ minWidth: "24px", minHeight: "24px" }}>
-                            <span style={{ fontWeight: 'bold' }}>{windowState.isMaximized ? '❐' : '□'}</span>
-                        </Button>
+                        {!isMobile && (
+                            <Button onClick={(e) => { e.stopPropagation(); toggleMaximizeApp(id); }} style={{ minWidth: "24px", minHeight: "24px" }}>
+                                <span style={{ fontWeight: 'bold' }}>{windowState.isMaximized ? '❐' : '□'}</span>
+                            </Button>
+                        )}
                         <Button onClick={(e) => { e.stopPropagation(); closeApp(id); }} style={{ minWidth: "24px", minHeight: "24px" }}>
                             <span style={{ fontWeight: 'bold', transform: 'translateY(-1px)' }}>x</span>
                         </Button>
                     </div>
                 </WindowHeader>
-                <WindowContent style={{ flex: 1, padding: '0.25rem', overflow: 'hidden' }}>
+                <WindowContent style={{ flex: 1, padding: isMobile ? '0.15rem' : '0.25rem', overflow: 'hidden' }}>
                     {children}
                 </WindowContent>
             </Window>

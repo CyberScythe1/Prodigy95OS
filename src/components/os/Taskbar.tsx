@@ -46,12 +46,21 @@ const Clock = styled.div`
 export default function Taskbar() {
     const { windows, activeWindowId, focusApp, minimizeApp, toggleStartMenu, startMenuOpen } = useDesktopStore();
     const [time, setTime] = useState<string>('');
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
         const updateTime = () => setTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
         updateTime();
         const interval = setInterval(updateTime, 1000);
-        return () => clearInterval(interval);
+        
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+
+        return () => {
+            clearInterval(interval);
+            window.removeEventListener('resize', checkMobile);
+        };
     }, []);
 
     const handleAppClick = (appId: string, isMinimized: boolean) => {
@@ -69,18 +78,18 @@ export default function Taskbar() {
 
     return (
         <TaskbarContainer position="fixed">
-            <Toolbar style={{ justifyContent: 'space-between', padding: '0 4px', height: '40px' }}>
+            <Toolbar style={{ justifyContent: 'space-between', padding: isMobile ? '0 2px' : '0 4px', height: '40px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', flex: 1, overflow: 'hidden' }}>
                     <StartButton
                         onClick={toggleStartMenu}
                         active={startMenuOpen}
                         style={{ 
                           padding: '0px', 
-                          minWidth: '100px', 
+                          minWidth: isMobile ? '80px' : '100px', 
                           height: '34px', 
-                          margin: '3px 4px',
+                          margin: isMobile ? '3px 2px' : '3px 4px',
                           backgroundImage: 'url(/icons/windows-start.png)',
-                          backgroundSize: 'cover', // Automatically scale to width
+                          backgroundSize: 'cover',
                           backgroundPosition: 'center',
                           backgroundRepeat: 'no-repeat',
                           border: 'none',
@@ -95,14 +104,15 @@ export default function Taskbar() {
                                 key={w.id}
                                 active={activeWindowId === w.id && !w.isMinimized}
                                 onClick={() => handleAppClick(w.id, w.isMinimized)}
+                                style={{ minWidth: isMobile ? '40px' : '120px' }}
                             >
-                                {w.appName}
+                                {isMobile ? w.appName.substring(0, 3) + '..' : w.appName}
                             </AppTab>
                         ))}
                     </AppTabsContainer>
                 </div>
 
-                <Clock>{time}</Clock>
+                <Clock style={{ padding: isMobile ? '0 5px' : '0 10px', fontSize: isMobile ? '12px' : 'inherit' }}>{time}</Clock>
             </Toolbar>
         </TaskbarContainer>
     );

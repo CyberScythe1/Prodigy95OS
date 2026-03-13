@@ -15,6 +15,14 @@ export default function YouTubeSummarizer() {
     const { topics, addNote, fetchData } = useNotesStore();
     const [selectedTopic, setSelectedTopic] = useState<string>('');
     const [saving, setSaving] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     useEffect(() => {
         if (user && topics.length === 0) {
@@ -81,16 +89,16 @@ export default function YouTubeSummarizer() {
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '10px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: isMobile ? '5px' : '10px' }}>
             <Fieldset label="Enter YouTube URL">
-                <div style={{ display: 'flex', gap: '8px' }}>
+                <div style={{ display: 'flex', gap: '8px', flexDirection: isMobile ? 'column' : 'row' }}>
                     <TextInput
                         placeholder="https://youtube.com/watch?v=..."
                         fullWidth
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
                     />
-                    <Button onClick={handleSummarize} disabled={loading || !url.trim()}>
+                    <Button onClick={handleSummarize} disabled={loading || !url.trim()} fullWidth={isMobile}>
                         Summarize
                     </Button>
                 </div>
@@ -98,7 +106,7 @@ export default function YouTubeSummarizer() {
 
             {loading && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '0 5px' }}>
-                    <span style={{ fontSize: '12px', minWidth: '90px' }}>Processing...</span>
+                    <span style={{ fontSize: '12px', minWidth: isMobile ? 'auto' : '90px' }}>{isMobile ? '...' : 'Processing...'}</span>
                     <ProgressBar value={progress} style={{ flex: 1 }} />
                 </div>
             )}

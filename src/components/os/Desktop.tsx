@@ -51,10 +51,18 @@ const Attribution = styled.p`
 
 export default function Desktop({ children }: { children: React.ReactNode }) {
     const { closeStartMenu } = useDesktopStore();
+    const [isMobile, setIsMobile] = React.useState(false);
+
+    React.useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     return (
-        <DesktopContainer onClick={closeStartMenu}>
-            <Watermark>
+        <DesktopContainer onClick={closeStartMenu} style={{ padding: isMobile ? '5px' : '10px', gap: isMobile ? '10px' : '20px' }}>
+            <Watermark style={{ opacity: isMobile ? 0.05 : 0.15, transform: isMobile ? 'scale(0.8)' : 'none', transformOrigin: 'bottom right' }}>
                 <h1>Prodigy95</h1>
                 <p>AI Operating System</p>
                 <Attribution>By King Prithvi</Attribution>
