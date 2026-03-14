@@ -22,7 +22,7 @@ const Watermark = styled.div`
   bottom: 20px;
   right: 20px;
   font-family: 'MS Sans Serif', Arial;
-  color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.3);
   pointer-events: none;
   text-align: right;
   z-index: 0;
@@ -62,10 +62,10 @@ export default function Desktop({ children }: { children: React.ReactNode }) {
 
     return (
         <DesktopContainer onClick={closeStartMenu} style={{ padding: isMobile ? '5px' : '10px', gap: isMobile ? '10px' : '20px' }}>
-            <Watermark style={{ opacity: isMobile ? 0.05 : 0.15, transform: isMobile ? 'scale(0.8)' : 'none', transformOrigin: 'bottom right' }}>
-                <h1>Prodigy95</h1>
+            <Watermark style={{ opacity: isMobile ? 0.4 : 1, transform: isMobile ? 'scale(0.8)' : 'none', transformOrigin: 'bottom right' }}>
+                <h1>Prodigy95 OS</h1>
                 <p>AI Operating System</p>
-                <Attribution>By King Prithvi</Attribution>
+                <Attribution>Made By King Prithvi</Attribution>
             </Watermark>
             {children}
         </DesktopContainer>

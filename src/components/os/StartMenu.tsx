@@ -81,7 +81,7 @@ export default function StartMenu() {
         <StartMenuContainer>
             <SidebarBrand>
                 <BrandText><strong>Prodigy95</strong> OS</BrandText>
-                <AttributionText>By King Prithvi</AttributionText>
+                <AttributionText>Made By King Prithvi</AttributionText>
             </SidebarBrand>
             <List horizontalAlign="left" verticalAlign="bottom" style={{ boxShadow: 'none', border: 'none', margin: 0, padding: 0 }}>
                 <ListItem onClick={() => handleLaunchApp('youtube-summarizer', 'YouTube Summarizer')}>
