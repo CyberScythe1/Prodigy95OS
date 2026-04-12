@@ -93,6 +93,9 @@ export default function StartMenu() {
                 <ListItem onClick={() => handleLaunchApp('job-search', 'Job Search')}>
                     <span role="img" aria-label="jobs">💼</span> AI Job Search
                 </ListItem>
+                <ListItem onClick={() => handleLaunchApp('minesweeper', 'Minesweeper')}>
+                    <span role="img" aria-label="bomb">💣</span> Minesweeper
+                </ListItem>
 
                 <Divider />
 

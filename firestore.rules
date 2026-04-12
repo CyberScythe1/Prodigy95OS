@@ -1,0 +1,27 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Shared rule for user-owned documents
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    match /topics/{topicId} {
+      allow read: if isOwner(resource.data.user_id);
+      allow create: if isOwner(request.resource.data.user_id);
+      allow update, delete: if isOwner(resource.data.user_id);
+    }
+
+    match /notes/{noteId} {
+      allow read: if isOwner(resource.data.user_id);
+      allow create: if isOwner(request.resource.data.user_id);
+      allow update, delete: if isOwner(resource.data.user_id);
+    }
+    
+    // Add default deny for everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -10,6 +10,7 @@ import YouTubeSummarizer from '@/components/apps/YouTubeSummarizer';
 import NotesApp from '@/components/apps/NotesApp';
 import JobSearchApp from '@/components/apps/JobSearchApp';
 import LoginApp from '@/components/apps/LoginApp';
+import Minesweeper from '@/components/apps/Minesweeper';
 import { auth } from '@/lib/firebase';
 import { useAuthStore } from '@/store/useAuthStore';
 
@@ -32,6 +33,7 @@ export default function Home() {
         <DesktopIcon id="youtube-summarizer" name="YouTube Summarizer" emoji="📹" color="#FF0000" />
         <DesktopIcon id="notes-app" name="Notes Saver" emoji="📝" color="#FFFF00" />
         <DesktopIcon id="job-search" name="AI Job Search" emoji="💼" color="#0000FF" />
+        <DesktopIcon id="minesweeper" name="Minesweeper" emoji="💣" color="#4a4a4a" />
 
         {/* Applications */}
         <WindowManager id="youtube-summarizer" appName="YouTube Summarizer">
@@ -48,6 +50,10 @@ export default function Home() {
 
         <WindowManager id="login-app" appName="Network Connectivity">
           <LoginApp />
+        </WindowManager>
+
+        <WindowManager id="minesweeper" appName="Minesweeper">
+          <Minesweeper />
         </WindowManager>
 
         <StartMenu />
