@@ -97,10 +97,9 @@ export default function StartMenu() {
                     <span role="img" aria-label="bomb">💣</span> Minesweeper
                 </ListItem>
 
-                <Divider />
-
-                <ListItem disabled>⚙️ Settings</ListItem>
-                <ListItem disabled>🔍 Help</ListItem>
+                <ListItem onClick={() => handleLaunchApp('prodigy-ai', 'Prodigy AI')}>
+                    <span role="img" aria-label="brain">🧠</span> Prodigy AI
+                </ListItem>
                 <Divider />
                 <ListItem onClick={handleAuth}>
                     {user ? 'Log Out...' : 'Log In...'}
