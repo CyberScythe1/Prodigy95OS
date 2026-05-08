@@ -11,6 +11,7 @@ import NotesApp from '@/components/apps/NotesApp';
 import JobSearchApp from '@/components/apps/JobSearchApp';
 import LoginApp from '@/components/apps/LoginApp';
 import Minesweeper from '@/components/apps/Minesweeper';
+import ProdigyAI from '@/components/apps/ProdigyAI';
 import { auth } from '@/lib/firebase';
 import { useAuthStore } from '@/store/useAuthStore';
 
@@ -34,6 +35,7 @@ export default function Home() {
         <DesktopIcon id="notes-app" name="Notes Saver" emoji="📝" color="#FFFF00" />
         <DesktopIcon id="job-search" name="AI Job Search" emoji="💼" color="#0000FF" />
         <DesktopIcon id="minesweeper" name="Minesweeper" emoji="💣" color="#4a4a4a" />
+        <DesktopIcon id="prodigy-ai" name="Prodigy AI" emoji="🧠" color="#800080" />
 
         {/* Applications */}
         <WindowManager id="youtube-summarizer" appName="YouTube Summarizer">
@@ -54,6 +56,10 @@ export default function Home() {
 
         <WindowManager id="minesweeper" appName="Minesweeper">
           <Minesweeper />
+        </WindowManager>
+
+        <WindowManager id="prodigy-ai" appName="Prodigy AI">
+          <ProdigyAI />
         </WindowManager>
 
         <StartMenu />
